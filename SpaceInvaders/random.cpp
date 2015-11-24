@@ -5,12 +5,9 @@ namespace si {
         : device(), engine(device()),
           standardUniformDistribution(0, 1) {}
 
-    RandomGenerator &RandomGenerator::instance() {
-        static RandomGenerator randomGenerator;
-        return randomGenerator;
-    }
+    RandomGenerator RandomGenerator::rg;
 
-    double RandomGenerator::random() {
+    float RandomGenerator::random() {
         return standardUniformDistribution(engine);
     }
 }

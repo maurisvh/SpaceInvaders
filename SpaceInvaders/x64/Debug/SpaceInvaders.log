@@ -1,19 +1,23 @@
-﻿Build started 12/11/2015 2:07:15.
-     1>Project "c:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\SpaceInvaders\SpaceInvaders.vcxproj" on node 2 (Build target(s)).
+﻿Build started 24/11/2015 18:00:14.
+     1>Project "C:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\SpaceInvaders\SpaceInvaders.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\SFML-2.3.2\include" /Zi /nologo /W3 /WX- /sdl /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt world.cpp
-         world.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\SFML-2.3.2\include" /Zi /nologo /W3 /WX- /sdl /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt "game-view.cpp"
+         game-view.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\SFML-2.3.2\lib" "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.lib" /MACHINE:X64 x64\Debug\entity.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\SFML-2.3.2\lib" "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.lib" /MACHINE:X64 x64\Debug\bullet.obj
+         x64\Debug\controller.obj
+         x64\Debug\entity.obj
+         "x64\Debug\game-view.obj"
          x64\Debug\game.obj
          x64\Debug\invader.obj
          x64\Debug\main.obj
+         x64\Debug\player.obj
          x64\Debug\random.obj
          x64\Debug\timing.obj
-         x64\Debug\world.obj
-         SpaceInvaders.vcxproj -> c:\users\mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.exe
-     1>Done Building Project "c:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\SpaceInvaders\SpaceInvaders.vcxproj" (Build target(s)).
+         x64\Debug\scene.obj
+         SpaceInvaders.vcxproj -> C:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\x64\Debug\SpaceInvaders.exe
+     1>Done Building Project "C:\Users\Mauris\documents\visual studio 2013\Projects\SpaceInvaders\SpaceInvaders\SpaceInvaders.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.46
+Time Elapsed 00:00:02.72

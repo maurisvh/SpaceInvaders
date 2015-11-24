@@ -3,14 +3,26 @@
 namespace si {
     namespace model {
         Game::Game() {
-            worlds = std::vector<World>({
-                World()
+            scenes = std::vector<std::shared_ptr<Scene>>({
+                std::make_shared<Scene>()
             });
         }
 
+        void Game::observeChildren() {
+            for (auto &s : scenes) {
+                s->observeChildren();
+                s->addObserver(shared_from_this());
+            }
+        }
+
         void Game::update(const sf::Time &dt) {
-            for (auto &e : worlds)
-                e.update(dt);
+            for (auto &s : scenes)
+                s->update(dt);
+        }
+
+        void Game::onEvent(const controller::KeyEvent &e) {
+            for (auto &s : scenes)
+                s->keyEvent(e);
         }
     }
 }

@@ -3,11 +3,17 @@
 
 namespace si {
     namespace model {
-        class Invader : public Entity, public IPhysical {
+        class Invader : public PathedEntity,
+            public virtual Observable<Entity> {
+            float xWigglePeriod, yWigglePeriod, wigglePhase;
+
         public:
-            static const double size;
+            static const float size;
 
             explicit Invader(const sf::Vector2f &p);
+
+            float pathDrag() const override;
+            sf::Vector2f path(sf::Time time) const override;
 
             void update(const sf::Time &dt) override;
         };

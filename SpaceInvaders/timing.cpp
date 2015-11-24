@@ -4,10 +4,7 @@
 namespace si {
     Stopwatch::Stopwatch() : clock() {}
 
-    Stopwatch &Stopwatch::instance() {
-        static Stopwatch stopwatch;
-        return stopwatch;
-    }
+    Stopwatch Stopwatch::instance;
 
     sf::Time Stopwatch::getDelta() {
         return clock.restart();

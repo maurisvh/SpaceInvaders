@@ -4,8 +4,8 @@
 namespace si {
     class Stopwatch {
     public:
-        /// Return the singleton Stopwatch instance.
-        static Stopwatch &instance();
+        /// The singleton Stopwatch instance.
+        static Stopwatch instance;
 
         /// Get the elapsed time since the previous call to `getDelta`,
         /// or on the first call, the time since the clock was started.

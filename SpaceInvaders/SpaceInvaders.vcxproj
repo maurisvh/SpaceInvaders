@@ -158,23 +158,32 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="controller.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="game-view.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="invader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="timing.cpp" />
-    <ClCompile Include="world.cpp" />
+    <ClCompile Include="scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="controller.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="game-view.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="invader.h" />
+    <ClInclude Include="key-event.h" />
+    <ClInclude Include="observer.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="timing.h" />
-    <ClInclude Include="world.h" />
+    <ClInclude Include="scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
