@@ -28,7 +28,7 @@ namespace si {
         }
 
         float IPhysical::distance(const sf::Vector2f& p) const {
-            return hypot(p.x, p.y);
+            return hypot(p.x - position().x, p.y - position().y);
         }
 
         float IPhysical::distance(const IPhysical& other) const {
@@ -36,7 +36,7 @@ namespace si {
         }
 
         bool IPhysical::collides(const IPhysical& other) const {
-            return distance(other) <= size() + other.size();
+            return distance(other) <= 0.5f * (size() + other.size());
         }
 
         bool IPhysical::offScreen() const {

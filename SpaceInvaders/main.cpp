@@ -10,9 +10,6 @@
 
 namespace si {
     void playGame() {
-        Stopwatch &sw = Stopwatch::instance;
-        RandomGenerator &rg = RandomGenerator::rg;
-
         sf::RenderWindow window{
             sf::VideoMode(model::screenWidth, model::screenHeight),
             "Space Invaders",
@@ -34,7 +31,7 @@ namespace si {
                     window.close();
             }
             
-            sf::Time dt = sw.getDelta();
+            sf::Time dt = Stopwatch::sw.getDelta();
             controller.poll(dt);
             game->update(dt);
             gameView->display(dt);

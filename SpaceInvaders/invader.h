@@ -4,7 +4,8 @@
 namespace si {
     namespace model {
         class Invader : public PathedEntity,
-            public virtual Observable<Entity> {
+            public virtual Observable<Entity>,
+            public virtual IShootable {
             float xWigglePeriod, yWigglePeriod, wigglePhase;
 
         public:
@@ -14,6 +15,8 @@ namespace si {
 
             float pathDrag() const override;
             sf::Vector2f path(sf::Time time) const override;
+
+            void shot() override;
 
             void update(const sf::Time &dt) override;
         };

@@ -40,6 +40,8 @@ namespace si {
             return origin + pathOrigin + pathRel + wiggle;
         }
 
+        void Invader::shot() { destroy(); publish(*this); }
+
         void Invader::update(const sf::Time &dt) {
             PathedEntity::update(dt);
             publish(*this);
