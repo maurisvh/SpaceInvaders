@@ -7,8 +7,7 @@
 
 namespace si {
     namespace view {
-        GameView::GameView(sf::RenderWindow &w) : window(w) {
-            // backgroundStars = std::vector<BackgroundStar>(300);
+        GameView::GameView(sf::RenderWindow &w) : window(w), gameOver(false) {
             particles = std::vector<std::shared_ptr<Particle>>();
             for (int i = 0; i < 300; i++) {
                 particles.emplace_back(std::make_shared<BackgroundStar>());
@@ -16,12 +15,12 @@ namespace si {
             vgaFont.loadFromFile("vga.ttf");
         }
 
-        void GameView::drawCircle(const sf::Vector2f &p, float diameter, sf::Color color) {
+        sf::CircleShape GameView::makeCircle(const sf::Vector2f &p, float diameter, sf::Color color) {
             sf::CircleShape shape{ diameter * 0.5f };
             shape.setFillColor(color);
             shape.setPosition(floor(p.x) - diameter * 0.5f,
                               floor(p.y) - diameter * 0.5f);
-            window.draw(shape);
+            return shape;
         }
 
         void GameView::display(const sf::Time &dt) {
@@ -38,21 +37,10 @@ namespace si {
                 p->draw(window);
             }
 
-            for (const auto &p : invaderPositions) {
-                drawCircle(p, model::Invader::size, sf::Color::Cyan);
-            }   
-            invaderPositions.clear();
-            
-            for (const auto &p : playerPositions)
-                drawCircle(p, model::Player::size, sf::Color::Yellow);
-            playerPositions.clear();
-            
-            auto bulletCount = 0;
-            for (const auto &p : playerBulletPositions) {
-                drawCircle(p, model::Bullet::size, sf::Color(255, 200, 50));
-                ++bulletCount;
+            for (const auto &d : drawables) {
+                window.draw(*d);
             }
-            playerBulletPositions.clear();
+            drawables.clear();
 
             int fps = int(1.0f / dt.asSeconds());
             sf::Text fpsText = sf::Text(std::to_string(fps) + " fps", vgaFont, 16);
@@ -60,10 +48,17 @@ namespace si {
             fpsText.setColor(fps < 60 ? sf::Color::Red : sf::Color::White);
             window.draw(fpsText);
 
-            sf::Text bulletText = sf::Text(std::to_string(bulletCount) + " bullets", vgaFont, 16);
-            bulletText.setPosition(5.0f, 20.0f);
-            bulletText.setColor(sf::Color::White);
-            window.draw(bulletText);
+            if (gameOver) {
+                sf::Text gameOverText = sf::Text("GAME OVER ;_;", vgaFont, 64);
+                float cx = model::screenWidth  / 2.0f - gameOverText.getLocalBounds().width / 2.0f;
+
+                gameOverText.setPosition(cx + 2.0f, 102.0f);
+                gameOverText.setColor(sf::Color::Black);
+                window.draw(gameOverText);
+                gameOverText.setPosition(cx - 2.0f, 98.0f);
+                gameOverText.setColor(sf::Color::White);
+                window.draw(gameOverText);
+            }
 
             window.display();
         }
@@ -73,17 +68,31 @@ namespace si {
                 particles.emplace_back(std::make_shared<ExplosionParticle>(position));
         }
 
-        void GameView::onEvent(const model::Entity &e) {
-            if (auto *i = dynamic_cast<const model::Invader*>(&e)) {
-                if (i->isDestroyed())
-                    explode(i->position());
-                else
-                    invaderPositions.emplace_back(i->position());
-                
-            } else if (auto *p = dynamic_cast<const model::Player*>(&e)) {
-                playerPositions.emplace_back(p->position());
-            } else if (auto *pb = dynamic_cast<const model::PlayerBullet*>(&e)) {
-                playerBulletPositions.emplace_back(pb->position());
+        void GameView::onEvent(const Message &m) {
+            // TODO: specific event for entity with health?
+            if (auto d = dynamic_cast<const GameStartMessage*>(&m)) {
+                gameOver = false;
+            } else if (auto d = dynamic_cast<const GameOverMessage*>(&m)) {
+                gameOver = true;
+            } else if (auto d = dynamic_cast<const EntityMessage*>(&m)) {
+                if (d->type == typeid(model::Bullet)) {
+                    drawables.push_back(
+                        std::make_shared<sf::CircleShape>(
+                            makeCircle(d->position, model::Bullet::size, sf::Color::Yellow)));
+                } else if (d->type == typeid(model::Player)) {
+                    drawables.push_back(
+                        std::make_shared<sf::CircleShape>(
+                            makeCircle(d->position, model::Player::size, sf::Color(40, 170, 200))));
+                }
+            } else if (auto d = dynamic_cast<const HealthEntityMessage*>(&m)) {
+                if (d->type == typeid(model::Invader)) {
+                    drawables.push_back(
+                        std::make_shared<sf::CircleShape>(
+                            makeCircle(d->position, model::Invader::size,
+                                sf::Color(200, 60, 10 + d->health * 30))));
+                }
+            } else if (auto d = dynamic_cast<const ExplosionMessage*>(&m)) {
+                explode(d->position);
             }
         }
     }

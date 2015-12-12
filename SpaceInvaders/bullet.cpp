@@ -13,27 +13,29 @@ namespace si {
             if (offScreen()) destroy();
         }
 
-        void Bullet::hit(IShootable& e) {
-            e.shot();
-            destroy();
-        }
-
-        bool Bullet::harmsPlayer() const { return false; }
-        bool Bullet::harmsInvader() const { return false; }
-        bool Bullet::harmsShield() const { return true; }
-
         void Bullet::update(const sf::Time& dt) {
             movement(dt);
-            publish(*this);
+            publish(EntityMessage(position(), typeid(Bullet)));
         }
 
         float PlayerBullet::randomAngle() {
-            return angle::up + RandomGenerator::rg.random() * 0.1f - 0.05f;
+            return angle::up + RandomGenerator::rg.random(-0.05f, 0.05f);
         }
 
         PlayerBullet::PlayerBullet(const sf::Vector2f& p)
             : Bullet(p, 200.0f, randomAngle()), IPhysical(p, size) {}
 
-        bool PlayerBullet::harmsInvader() const { return true; }
+        void PlayerBullet::hitEnemy(IPlayerBulletTarget& e) {
+            e.shot();
+            destroy();
+        }
+
+        EnemyBullet::EnemyBullet(const sf::Vector2f& p, float angle)
+            : Bullet(p, 200.0f, angle), IPhysical(p, size) {}
+
+        void EnemyBullet::hitPlayer(IEnemyBulletTarget& e) {
+            e.shot();
+            destroy();
+        }
     }
 }

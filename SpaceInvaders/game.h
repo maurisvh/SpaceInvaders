@@ -7,7 +7,7 @@
 namespace si {
     namespace model {
         class Game : public Entity,
-            public virtual Propagate<Entity>,
+            public virtual Propagate<Message>,
             public virtual Observer<controller::KeyEvent>,
             public std::enable_shared_from_this<Game> {
         public:

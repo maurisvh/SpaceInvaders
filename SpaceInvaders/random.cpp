@@ -10,4 +10,8 @@ namespace si {
     float RandomGenerator::random() {
         return standardUniformDistribution(engine);
     }
+
+    float RandomGenerator::random(float a, float b) {
+        return random() * (b - a) + a;
+    }
 }

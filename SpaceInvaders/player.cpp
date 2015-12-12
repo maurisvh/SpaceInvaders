@@ -4,7 +4,7 @@
 
 namespace si {
     namespace model {
-        const float Player::size = 40.0;
+        const float Player::size = 20.0;
         Player::Player(const sf::Vector2f& p)
             : Entity(), IPhysical(p, size), hspeed(0.0) {}
 
@@ -40,7 +40,13 @@ namespace si {
             applySpeed(dt);
             applyBulletTimeout(dt);
             clampHorizontalPosition();
-            publish(*this);
+            publish(EntityMessage(position(), typeid(Player)));
+        }
+
+        void Player::shot() {
+            destroy();
+            publish(ExplosionMessage(position()));
+            publish(GameOverMessage());
         }
 
         void Player::setHorizontalAcceleration(const float a) {

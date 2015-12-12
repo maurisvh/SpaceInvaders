@@ -5,13 +5,16 @@
 namespace si {
     namespace model {
         class Player : public Entity, public virtual IPhysical,
-            public virtual Observable<Entity>,
-            public virtual ISpawns<PlayerBullet> {
+            public virtual Observable<Message>,
+            public virtual ISpawns<PlayerBullet>,
+            public virtual IEnemyBulletTarget {
         public:
             static const float size;
 
             explicit Player(const sf::Vector2f& p);
             void update(const sf::Time& dt) override;
+
+            void shot() override;
 
             void setHorizontalAcceleration(const float a);
             void shoot();

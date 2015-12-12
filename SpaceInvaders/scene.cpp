@@ -6,12 +6,12 @@
 namespace si {
     namespace model {
         Scene::Scene() {
-            invaders = std::vector<std::shared_ptr<Invader>>({
-                std::make_shared<Invader>(sf::Vector2f(50, 50)),
-                std::make_shared<Invader>(sf::Vector2f(110, 50)),
-                std::make_shared<Invader>(sf::Vector2f(170, 50)),
-                std::make_shared<Invader>(sf::Vector2f(230, 50)),
-            });
+            for (int x = -2; x <= 2; x++) {
+                for (int y = 0; y < 3; y++) {
+                    sf::Vector2f pos = sf::Vector2f(screenWidth / 2.0f + 60.0f * x - 112.5f, 50.0f + 60.0f * y);
+                    invaders.push_back(std::make_shared<Invader>(pos));
+                }
+            }
 
             sf::Vector2f playerPosition(screenWidth / 2.0f, screenHeight - 40.0f);
             players = std::vector<std::shared_ptr<Player>>({
@@ -35,9 +35,10 @@ namespace si {
         }
 
         void Scene::update(const sf::Time &dt) {
+            eraseDestroyed(players);
             for (auto &e : players) {
                 e->update(dt);
-                for (std::shared_ptr<PlayerBullet> b : e->newSpawns()) {
+                for (auto b : e->newSpawns()) {
                     playerBullets.push_back(b);
                     b->addObserver(shared_from_this());
                 }
@@ -46,15 +47,26 @@ namespace si {
             eraseDestroyed(invaders);
             for (auto &e : invaders) {
                 e->update(dt);
+                for (auto b : e->newSpawns()) {
+                    enemyBullets.push_back(b);
+                    b->addObserver(shared_from_this());
+                }
             }
 
             eraseDestroyed(playerBullets);
             for (auto &e : playerBullets) {
                 e->update(dt);
                 for (auto &other : invaders)
-                    if (e->collides(*other)) {
-                        e->hit(*other);
-                    }
+                    if (e->collides(*other))
+                        e->hitEnemy(*other);
+            }
+
+            eraseDestroyed(enemyBullets);
+            for (auto &e : enemyBullets) {
+                e->update(dt);
+                for (auto &other : players)
+                    if (e->collides(*other))
+                        e->hitPlayer(*other);
             }
         }
 

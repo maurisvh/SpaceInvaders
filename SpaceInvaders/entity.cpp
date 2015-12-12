@@ -48,8 +48,8 @@ namespace si {
 
         void PathedEntity::update(const sf::Time& dt) {
             age += dt;
-            auto vec = path(age) - position();
-            moveBy((1.0f - powf(pathDrag(), dt.asSeconds())) * vec);
+            auto delta = path(age) - position();
+            moveBy((1.0f - powf(pathDrag(), dt.asSeconds())) * delta);
         }
     }
 }

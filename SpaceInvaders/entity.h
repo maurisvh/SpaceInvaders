@@ -76,11 +76,17 @@ namespace si {
             float m_size;
         };
 
-        /// An interface for entities that may be shot.
-        class IShootable {
+        /// An interface for entities that may be shot by the player.
+        class IPlayerBulletTarget {
         public:
-            virtual ~IShootable() {}
+            virtual ~IPlayerBulletTarget() {}
+            virtual void shot() = 0;
+        };
 
+        /// An interface for entities that may be shot by the enemies.
+        class IEnemyBulletTarget {
+        public:
+            virtual ~IEnemyBulletTarget() {}
             virtual void shot() = 0;
         };
 

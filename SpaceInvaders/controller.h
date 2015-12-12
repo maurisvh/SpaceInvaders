@@ -14,6 +14,9 @@ namespace si {
             const Key rightKey = Key::Right;
             const Key shootKey = Key::X;
 
+            /// Some additional debug keys.
+            const Key debugRestartKey = Key::R;
+
             /// Register a Game object to observe this controller.
             void registerGame(const std::shared_ptr<model::Game> game);
 

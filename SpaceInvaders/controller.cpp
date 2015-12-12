@@ -21,6 +21,10 @@ namespace si {
             // Shooting bullets.
             if (kb::isKeyPressed(shootKey))
                 publish(KeyEvent(Shoot, dt));
+
+            if (kb::isKeyPressed(debugRestartKey)) {
+                publish(KeyEvent(DebugRestart, dt));
+            }
         }
     }
 }

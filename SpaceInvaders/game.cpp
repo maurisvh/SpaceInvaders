@@ -21,6 +21,15 @@ namespace si {
         }
 
         void Game::onEvent(const controller::KeyEvent &e) {
+            if (e.key == controller::DebugRestart) {
+                scenes = std::vector<std::shared_ptr<Scene>>({
+                    std::make_shared<Scene>()
+                });
+                observeChildren();
+                publish(GameStartMessage());
+                return;
+            }
+
             for (auto &s : scenes)
                 s->keyEvent(e);
         }

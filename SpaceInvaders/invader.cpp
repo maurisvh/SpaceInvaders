@@ -1,6 +1,7 @@
 #include "invader.h"
 #include <iostream>
 #include "random.h"
+#include "constants.h"
 
 namespace si {
     namespace model {
@@ -8,14 +9,19 @@ namespace si {
 
         Invader::Invader(const sf::Vector2f& p)
             : PathedEntity(p, size), IPhysical(p, size),
-            xWigglePeriod(RandomGenerator::rg.random() * 2.0f + 4.0f),
-            yWigglePeriod(RandomGenerator::rg.random() * 2.0f + 4.0f),
-            wigglePhase(RandomGenerator::rg.random() * 30.0f) {}
+            xWigglePeriod(RandomGenerator::rg.random(4.0f, 6.0f)),
+            yWigglePeriod(RandomGenerator::rg.random(4.0f, 6.0f)),
+            wigglePhase(RandomGenerator::rg.random(0.0f, 30.0f)),
+            m_health(5) {}
 
-        float Invader::pathDrag() const { return 0.08f; }
+        int Invader::health() const { return m_health; }
+
+        float Invader::pathDrag() const { return 0.1f; }
 
         sf::Vector2f Invader::path(sf::Time time) const {
             // Zigzag right-down-left-down with a period of ten seconds.
+            // The path's width is 4.5 * 50.0 = 225 pixels.
+
             const float v = 50.0; // speed (pixels per second)
             const float sec = time.asSeconds(); // time passed (seconds)
 
@@ -40,11 +46,22 @@ namespace si {
             return origin + pathOrigin + pathRel + wiggle;
         }
 
-        void Invader::shot() { destroy(); publish(*this); }
+        void Invader::shot() {
+            if (--m_health <= 0) {
+                destroy();
+                publish(ExplosionMessage(position()));
+            }
+        }
 
         void Invader::update(const sf::Time &dt) {
             PathedEntity::update(dt);
-            publish(*this);
+
+            // Every second, there should be about a 30% chance of firing a bullet.
+            if (powf(0.7f, dt.asSeconds()) < RandomGenerator::rg.random()) {
+                float a = angle::down + RandomGenerator::rg.random(-0.5f, 0.5f);
+                spawn(std::make_shared<EnemyBullet>(position(), a));
+            }
+            publish(HealthEntityMessage(position(), health(), typeid(Invader)));
         }
     }
 }

@@ -9,6 +9,9 @@ namespace si {
 
         /// Generate a random float in the interval [0, 1).
         float random();
+
+        /// Generate a random float in the interval [a, b).
+        float random(float a, float b);
     
     private:
         RandomGenerator();
