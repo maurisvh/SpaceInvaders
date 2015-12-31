@@ -1,0 +1,16 @@
+﻿  bullet.cpp
+  controller.cpp
+  entity.cpp
+  game-view.cpp
+  game.cpp
+  invader.cpp
+  main.cpp
+  particle.cpp
+  player.cpp
+  random.cpp
+  read-level.cpp
+  shield.cpp
+  timing.cpp
+  scene.cpp
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppCommon.targets(637,5): error MSB6006: "link.exe" exited with code 1112.
+sfml-graphics.lib(sfml-graphics-2.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'

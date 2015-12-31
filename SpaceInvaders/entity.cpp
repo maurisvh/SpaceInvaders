@@ -8,43 +8,51 @@ namespace si {
         void Entity::destroy() { destroyed = true; }
         bool Entity::isDestroyed() const { return destroyed; }
 
-        IPhysical::IPhysical(const sf::Vector2f& p, float s)
-            : m_position(p), m_size(s) {}
+        PhysicalEntity::PhysicalEntity(const sf::Vector2f& p, float s)
+            : Entity(), m_position(p), m_size(s) {}
 
-        sf::Vector2f IPhysical::position() const {
+        sf::Vector2f PhysicalEntity::position() const {
             return m_position;
         }
 
-        float IPhysical::size() const {
+        float PhysicalEntity::size() const {
             return m_size;
         }
 
-        void IPhysical::moveTo(const sf::Vector2f& p) {
+        void PhysicalEntity::moveTo(const sf::Vector2f& p) {
             m_position = p;
         }
 
-        void IPhysical::moveBy(const sf::Vector2f& p) {
+        void PhysicalEntity::moveBy(const sf::Vector2f& p) {
             m_position += p;
         }
 
-        float IPhysical::distance(const sf::Vector2f& p) const {
+        float PhysicalEntity::distance(const sf::Vector2f& p) const {
             return hypot(p.x - position().x, p.y - position().y);
         }
 
-        float IPhysical::distance(const IPhysical& other) const {
+        float PhysicalEntity::distance(const PhysicalEntity& other) const {
             return distance(other.position());
         }
 
-        bool IPhysical::collides(const IPhysical& other) const {
+        bool PhysicalEntity::collides(const PhysicalEntity& other) const {
             return distance(other) <= 0.5f * (size() + other.size());
         }
 
-        bool IPhysical::offScreen() const {
+        bool PhysicalEntity::offScreen() const {
             return (position().x < -size()
                     || position().x > screenWidth + size()
                     || position().y < -size()
                     || position().y > screenHeight + size());
         }
+
+        void PhysicalEntity::explode() {
+            publish(ExplosionMessage(position()));
+            destroy();
+        }
+
+        PathedEntity::PathedEntity(const sf::Vector2f& p, float size)
+            : PhysicalEntity(p, size), origin(p), age(sf::Time::Zero) {}
 
         void PathedEntity::update(const sf::Time& dt) {
             age += dt;

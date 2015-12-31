@@ -5,7 +5,7 @@
 
 namespace si {
     namespace model {
-        class Bullet : public Entity, public virtual IPhysical,
+        class Bullet : public PhysicalEntity,
             public virtual Observable<Message> {
         public:
             Bullet(const sf::Vector2f &p, float speed, float angle);
@@ -35,7 +35,5 @@ namespace si {
             explicit EnemyBullet(const sf::Vector2f &p, float angle);
             void hitPlayer(IEnemyBulletTarget &e);
         };
-
-
     }
 }

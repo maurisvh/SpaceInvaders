@@ -7,12 +7,15 @@ namespace si {
     namespace model {
         const float Invader::size = 50.0;
 
-        Invader::Invader(const sf::Vector2f& p)
-            : PathedEntity(p, size), IPhysical(p, size),
-            xWigglePeriod(RandomGenerator::rg.random(4.0f, 6.0f)),
-            yWigglePeriod(RandomGenerator::rg.random(4.0f, 6.0f)),
-            wigglePhase(RandomGenerator::rg.random(0.0f, 30.0f)),
-            m_health(5) {}
+        Invader::Invader(const sf::Vector2f& p, int health, sf::Time bulletPeriod)
+            : PathedEntity(p, size),
+              xWigglePeriod(RandomGenerator::rg.random(4.0f, 6.0f)),
+              yWigglePeriod(RandomGenerator::rg.random(4.0f, 6.0f)),
+              wigglePhase(RandomGenerator::rg.random(0.0f, 30.0f)),
+              m_health(health),
+              m_bulletPeriod(bulletPeriod) {
+            setBulletTimer();
+        }
 
         int Invader::health() const { return m_health; }
 
@@ -33,7 +36,7 @@ namespace si {
             
             // pathRel = point relative to period start
             sf::Vector2f pathRel =
-                (r < 4.5f) ? sf::Vector2f(v * r, 0.0f)
+                  (r < 4.5f) ? sf::Vector2f(v * r, 0.0f)
                 : (r < 5.0f) ? sf::Vector2f(v * 4.5f, v * (r - 4.5f))
                 : (r < 9.5f) ? sf::Vector2f(v * 4.5f - v * (r - 5.0f), v * 0.5f)
                 : sf::Vector2f(0.0f, v * 0.5f + v * (r - 9.5f));
@@ -46,22 +49,25 @@ namespace si {
             return origin + pathOrigin + pathRel + wiggle;
         }
 
-        void Invader::shot() {
-            if (--m_health <= 0) {
-                destroy();
-                publish(ExplosionMessage(position()));
-            }
+        void Invader::shotByPlayer() {
+            if (--m_health <= 0)
+                explode();
         }
 
         void Invader::update(const sf::Time &dt) {
             PathedEntity::update(dt);
+            m_bulletTimer -= dt;
 
-            // Every second, there should be about a 30% chance of firing a bullet.
-            if (powf(0.7f, dt.asSeconds()) < RandomGenerator::rg.random()) {
-                float a = angle::down + RandomGenerator::rg.random(-0.5f, 0.5f);
+            if (m_bulletTimer <= sf::Time::Zero) {
+                float a = angle::down + RandomGenerator::rg.random(-0.3f, 0.3f);
                 spawn(std::make_shared<EnemyBullet>(position(), a));
+                setBulletTimer();
             }
-            publish(HealthEntityMessage(position(), health(), typeid(Invader)));
+            publish(InvaderMessage(position(), health()));
+        }
+
+        void Invader::setBulletTimer() {
+            m_bulletTimer = m_bulletPeriod * RandomGenerator::rg.random(0.5f, 1.5f);
         }
     }
 }

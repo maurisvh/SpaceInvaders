@@ -4,9 +4,11 @@
 
 namespace si {
     namespace model {
-        const float Player::size = 20.0;
+        const float Player::size = 28.0;
         Player::Player(const sf::Vector2f& p)
-            : Entity(), IPhysical(p, size), hspeed(0.0) {}
+            : PhysicalEntity(p, size), haccel(0.0f), hspeed(0.0f) {
+			bulletTimeout = sf::seconds(0.5f);
+        }
 
         void Player::applyAcceleration(const sf::Time& dt) {
             hspeed += haccel * dt.asSeconds();
@@ -14,7 +16,7 @@ namespace si {
         }
 
         void Player::applySpeed(const sf::Time& dt) {
-            hspeed = std::min(200.0f, std::max(-200.0f, hspeed));
+            hspeed = std::min(250.0f, std::max(-250.0f, hspeed));
             hspeed *= powf(0.05f, dt.asSeconds());
             moveBy(sf::Vector2f(hspeed * dt.asSeconds(), 0.0));
         }
@@ -40,12 +42,11 @@ namespace si {
             applySpeed(dt);
             applyBulletTimeout(dt);
             clampHorizontalPosition();
-            publish(EntityMessage(position(), typeid(Player)));
+            publish(PlayerMessage(position()));
         }
 
-        void Player::shot() {
-            destroy();
-            publish(ExplosionMessage(position()));
+        void Player::shotByEnemy() {
+            explode();
             publish(GameOverMessage());
         }
 
@@ -59,7 +60,7 @@ namespace si {
 
             sf::Vector2f bulletPos = position() + sf::Vector2f(0.0f, -size * 0.6f);
             spawn(std::make_shared<PlayerBullet>(bulletPos));
-            bulletTimeout = sf::seconds(0.3f);
+            bulletTimeout = sf::seconds(0.35f);
         }
     }
 }

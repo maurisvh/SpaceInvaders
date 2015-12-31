@@ -7,34 +7,41 @@
 #include "game-view.h"
 #include <memory>
 #include "controller.h"
+#include "logging.h"
 
 namespace si {
     void playGame() {
-        sf::RenderWindow window{
+        sf::RenderWindow window(
             sf::VideoMode(model::screenWidth, model::screenHeight),
             "Space Invaders",
-            sf::Style::Close | sf::Style::Titlebar};
+			// Don't allow resizing the game window.
+            sf::Style::Close | sf::Style::Titlebar,
+			// Use 4x multi-sampled anti-aliasing.
+			sf::ContextSettings(0, 0, 4));
 
-        auto game = std::make_shared<model::Game>();
-        game->observeChildren();
+		info("Starting game.");
+        model::Game game;
+        game.observeChildren();
 
-        auto gameView = std::make_shared<view::GameView>(window);
-        game->addObserver(gameView);
+        auto gameView = view::GameView(window);
+        game.addObserver(&gameView);
 
         controller::Controller controller;
-        controller.registerGame(game);
+        controller.registerGame(&game);
 
-        while (window.isOpen()) {
+        while (window.isOpen() && !game.quitting()) {
             sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     window.close();
+                else if (event.type == sf::Event::KeyPressed)
+                    controller.press(event.key.code);
             }
             
             sf::Time dt = Stopwatch::sw.getDelta();
             controller.poll(dt);
-            game->update(dt);
-            gameView->display(dt);
+            game.update(dt);
+            gameView.display(dt);
         }
     }
 }
@@ -46,5 +53,4 @@ int main() {
     catch (const std::exception &e) {
         std::cerr << "Fatal error: " << e.what() << std::endl;
     }
-    return 0;
 }

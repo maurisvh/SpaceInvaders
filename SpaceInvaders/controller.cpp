@@ -2,28 +2,36 @@
 
 namespace si {
     namespace controller {
-        void Controller::registerGame(const std::shared_ptr<model::Game> game) {
+        void Controller::registerGame(model::Game *game) {
             addObserver(game);
         }
 
         void Controller::poll(const sf::Time& dt) {
             using kb = sf::Keyboard;
 
-            // Horizontal movement. Keys should cancel each other out.
+            // Horizontal movement keys should cancel each other out.
             int xkeys = (kb::isKeyPressed(rightKey) ? 1 : 0)
                       - (kb::isKeyPressed(leftKey)  ? 1 : 0);
 
             if (xkeys == -1)
-                publish(KeyEvent(GoLeft, dt));
+                publish(GoLeft);
             else if (xkeys == 1)
-                publish(KeyEvent(GoRight, dt));
+                publish(GoRight);
 
             // Shooting bullets.
             if (kb::isKeyPressed(shootKey))
-                publish(KeyEvent(Shoot, dt));
+                publish(Shoot);
+        }
 
-            if (kb::isKeyPressed(debugRestartKey)) {
-                publish(KeyEvent(DebugRestart, dt));
+        void Controller::press(sf::Keyboard::Key code) {
+			if (code == leftKey) {
+				publish(MenuLeft);
+			} else if (code == rightKey) {
+				publish(MenuRight);
+			} else if (code == shootKey) {
+				publish(MenuSelect);
+			} else if (code == debugRestartKey) {
+                publish(DebugRestart);
             }
         }
     }

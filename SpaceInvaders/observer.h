@@ -4,32 +4,29 @@
 #include <memory>
 
 namespace si {
-    // E is the type of the event payload.
-    template <typename E>
+    // M is the type of the message payload.
+    template <typename M>
     class Observer {
     public:
         virtual ~Observer() {}
-        virtual void onEvent(const E&) = 0;
+        virtual void onEvent(const M&) = 0;
     };
 
-    template <typename E>
+    template <typename M>
     class Observable {
     public:
-        void publish(const E &e) {
-            for (auto &observer : observers)
-                observer->onEvent(e);
+        void publish(const M &m) {
+            for (auto &observer : observers) {
+				auto o = observer;
+                observer->onEvent(m);
+			}
         }
 
-        void addObserver(std::shared_ptr<Observer<E>> observer) {
+        void addObserver(Observer<M> *observer) {
             observers.push_back(observer);
         }
 
     private:
-        std::vector<std::shared_ptr<Observer<E>>> observers;
-    };
-
-    template <typename E>
-    struct Propagate : Observer<E>, Observable<E> {
-        void onEvent(const E &e) override { publish(e); }
+        std::vector<Observer<M> *> observers;
     };
 }

@@ -65,7 +65,7 @@ namespace si {
               RandomGenerator::rg.random(20.0f, 120.0f),
               false, sf::seconds(RandomGenerator::rg.random(0.5f, 2.5f)),
               fireColor(),
-              RandomGenerator::rg.random(3.0f, 13.0f)
+              RandomGenerator::rg.random(6.0f, 19.0f)
           ) {}
     }
 }
